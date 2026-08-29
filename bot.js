@@ -14,8 +14,11 @@ client.once('ready', () => {
   console.log(`[Discord] Bot online als ${client.user.tag}`);
 });
 
+const PREFIX = '!';
+
 client.on('messageCreate', (message) => {
   if (message.author.bot) return;
+
   lastMessage = {
     id: message.id,
     author: message.author.username,
@@ -23,6 +26,46 @@ client.on('messageCreate', (message) => {
     timestamp: message.createdTimestamp,
     channelId: message.channelId,
   };
+
+  if (!message.content.startsWith(PREFIX)) return;
+
+  const args = message.content.slice(PREFIX.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  switch (command) {
+    case 'ping':
+      message.reply('pong!');
+      break;
+
+    case 'hallo':
+    case 'hi':
+      message.reply(`Hallo ${message.author.username}!`);
+      break;
+
+    case 'help':
+      message.reply(
+        'Verfügbare Befehle:\n' +
+          '`!ping` - Pong!\n' +
+          '`!hallo` - Begrüßung\n' +
+          '`!info` - Bot-Infos\n'
+      );
+      break;
+
+    case 'info':
+      message.reply(
+        `Name: ${client.user.username}\n` +
+          `Status: Online auf ${client.guilds.cache.size} Server(n)`
+      );
+      break;
+
+    case 'bau':
+      message.reply('Was möchtest du bauen?');
+      break;
+
+    default:
+      message.reply(`Unbekannter Befehl \`${command}\`. Gib \`!help\` ein.`);
+      break;
+  }
 });
 
 function getLastMessage() {
