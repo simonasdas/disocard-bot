@@ -4,11 +4,14 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMembers,
     GatewayIntentBits.MessageContent,
   ],
 });
 
 let lastMessage = null;
+
+const WELCOME_CHANNELS = new Map();
 
 client.once('ready', () => {
   console.log(`[Discord] Bot online als ${client.user.tag}`);
@@ -42,11 +45,19 @@ client.on('messageCreate', (message) => {
       message.reply(`Hallo ${message.author.username}!`);
       break;
 
+    case 'welcome':
+      WELCOME_CHANNELS.set(message.guildId, message.channelId);
+      message.reply(
+        `✅ Welcome-Kanal für diesen Server auf <#${message.channelId}> gesetzt!`
+      );
+      break;
+
     case 'help':
       message.reply(
         'Verfügbare Befehle:\n' +
           '`!ping` - Pong!\n' +
           '`!hallo` - Begrüßung\n' +
+          '`!welcome` - Setzt den aktuellen Kanal als Welcome-Kanal\n' +
           '`!info` - Bot-Infos\n'
       );
       break;
@@ -66,6 +77,23 @@ client.on('messageCreate', (message) => {
       message.reply(`Unbekannter Befehl \`${command}\`. Gib \`!help\` ein.`);
       break;
   }
+});
+
+client.on('guildMemberAdd', (member) => {
+  const channelId = WELCOME_CHANNELS.get(member.guild.id);
+  if (!channelId) return;
+
+  const channel = member.guild.channels.cache.get(channelId);
+  if (!channel) return;
+
+  const avatar = member.user.displayAvatarURL({ size: 256, extension: 'png' });
+
+  channel
+    .send({
+      content: `👋 Willkommen auf dem Server **${member.guild.name}**, ${member.user} (${member.user.username})!\nSchön, dass du hier bist!`,
+      files: [{ attachment: avatar, name: 'avatar.png' }],
+    })
+    .catch((err) => console.error('[Discord] Welcome-Fehler:', err.message));
 });
 
 function getLastMessage() {
