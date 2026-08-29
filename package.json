@@ -4,7 +4,7 @@
   "description": "Eigener Discord-Clone mit Echtzeit-Chat",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node bot-start.js",
     "bot": "node bot-start.js",
     "tiktok": "node tiktok-index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
