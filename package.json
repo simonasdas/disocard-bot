@@ -1,0 +1,28 @@
+{
+  "name": "default-project",
+  "version": "1.0.0",
+  "description": "Eigener Discord-Clone mit Echtzeit-Chat",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "bot": "node bot-start.js",
+    "tiktok": "node tiktok-index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^13.0.2",
+    "cookie-parser": "^1.4.7",
+    "discord.js": "^14.27.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.2.0",
+    "socket.io": "^4.8.3",
+    "sqlite3": "^6.0.1",
+    "uuid": "^14.0.1"
+  }
+}
